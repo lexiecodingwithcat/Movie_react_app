@@ -19,6 +19,8 @@ const App = () => {
   //use state to pass data from console to the movie card
   //set "movies" as a a default empty array
   const [movies, setMovies] = useState([]);
+  //another state to make the search bar work4
+  const [searchTerm, setSearchTerm] = useState("");
   // 2. function fetch movies
   //async() function is asynchronously function, use title as parameter
   //The await keyword is used to wait for the response of the HTTP request to return,
@@ -32,7 +34,7 @@ const App = () => {
   };
   //1.fetch the API as soon as the component loads
   useEffect(() => {
-    searchMovies("Spiderman");
+    searchMovies("Batman");
   }, []);
 
   return (
@@ -41,30 +43,26 @@ const App = () => {
       <div className="search">
         <input
           placeholder="Search for movies"
-          value="Superman"
-          onChange={() => {}}
-        />
-        <img src={SearchIcon} alt="search for movies" onClick={() => {}} />
+          value={searchTerm}
+          //e is a event object when input is changed
+          onChange={(e) => 
+            setSearchTerm(e.target.value)
+          }/>
+        <img src={SearchIcon} alt="search for movies" onClick={() => searchMovies(searchTerm)} />
       </div>
       {/* Check the movies array is empty or not */}
-      {
-        movies?.length >0 
-        ? (<div className="container">
-        {/* <MovieCard movie1={movie1} /> */}
-        {movies.map((movie) => (
-           <MovieCard movie={movie} />
-        )
-        )}
-
-      </div>) :
-      (
-        <div className="empty">
-            <h2>No movies found</h2>
+      {movies?.length > 0 ? (
+        <div className="container">
+          {/* <MovieCard movie1={movie1} /> */}
+          {movies.map((movie) => (
+            <MovieCard movie={movie} />
+          ))}
         </div>
-      )
-      }
-
-      
+      ) : (
+        <div className="empty">
+          <h2>No movies found</h2>
+        </div>
+      )}
     </div>
   );
 };

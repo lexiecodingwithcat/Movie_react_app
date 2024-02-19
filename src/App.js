@@ -1,9 +1,8 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import MovieCard from "./MovieCard";
 
 import "./App.css";
 import SearchIcon from "./search.svg";
-
 
 //a3efb870
 const API_URL = "http://www.omdbapi.com?apikey=a3efb870";
@@ -17,7 +16,9 @@ const movie1 = {
 };
 
 const App = () => {
-    
+  //use state to pass data from console to the movie card
+  //set "movies" as a a default empty array
+  const [movies, setMovies] = useState([]);
   // 2. function fetch movies
   //async() function is asynchronously function, use title as parameter
   //The await keyword is used to wait for the response of the HTTP request to return,
@@ -26,7 +27,8 @@ const App = () => {
     // await
     const response = await fetch(`${API_URL}&s=${title}`);
     const data = await response.json();
-    console.log(data.Search);
+    //pass data to state setter;
+    setMovies(data.Search);
   };
   //1.fetch the API as soon as the component loads
   useEffect(() => {
@@ -44,9 +46,25 @@ const App = () => {
         />
         <img src={SearchIcon} alt="search for movies" onClick={() => {}} />
       </div>
-      <div className="container">
-        <MovieCard movie1={movie1}/>
-      </div>
+      {/* Check the movies array is empty or not */}
+      {
+        movies?.length >0 
+        ? (<div className="container">
+        {/* <MovieCard movie1={movie1} /> */}
+        {movies.map((movie) => (
+           <MovieCard movie={movie} />
+        )
+        )}
+
+      </div>) :
+      (
+        <div className="empty">
+            <h2>No movies found</h2>
+        </div>
+      )
+      }
+
+      
     </div>
   );
 };
